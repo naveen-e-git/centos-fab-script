@@ -21,6 +21,8 @@ def centos():
     app_c()
     db_c()
     lb_c()
+    memchace_c()
+    rabbitmq_c()
 ######################################### 
 
 def ciserver_u():
@@ -111,3 +113,23 @@ def lb_c():
      sudo("service iptables stop")
      sudo("service nginx start")
 
+
+def memcache_c():
+    sudo("yum install memcached -y")
+    sudo("memcached -p 11111 -U 11111 -u memcache -d")
+
+
+
+def rabbitmq_c():
+     sudo("yum update -y")
+     sudo("yum install wget -y")
+     sudo("yum install epel-release -y")
+     sudo("rpm --import https://dl.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc")
+     sudo("yum update -y")
+     #sudo("echo 'deb http://www.rabbitmq.com/debian/ testing main' | sudo tee /etc/apt/sources.list.d/rabbitmq.list")
+     #sudo("wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc | sudo apt-key add -")
+     #sudo("wget -O- https://dl.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc| sudo apt-key add -")
+     sudo("yum install rabbitmq-server -y")
+     sudo("echo '[{rabbit, [{loopback_users, []}]}].' > /etc/rabbitmq/rabbitmq.config")
+     sudo("rabbitmqctl add_user test test")
+     sudo("rabbitmqctl set_user_tags test administrator")

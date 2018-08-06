@@ -90,7 +90,7 @@ end
 end
 
    config.vm.define "mem" do |mem|
-   mem.vm.hostname = 'lb.com'
+   mem.vm.hostname = 'mem.com'
    mem.vm.network "private_network", ip: "192.168.10.24"
    mem.vm.provision :shell, inline: <<-SHELL
    sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes'/ /etc/ssh/sshd_config
@@ -106,7 +106,28 @@ end
    sudo yum install --upgrade pip
    sudo yum install fabric -y
    #sudo pip install fabric
-   fab -f /vagrant/vpro_app/fabfile.py mem_c
+   fab -f /vagrant/vpro_app/fabfile.py memcache_c
+   SHELL
+end
+
+   config.vm.define "rmq" do |rmq|
+   mem.vm.hostname = 'rmq.com'
+   mem.vm.network "private_network", ip: "192.168.10.25"
+   mem.vm.provision :shell, inline: <<-SHELL
+   sudo sed -i 's/PasswordAuthentication no/PasswordAuthentication yes'/ /etc/ssh/sshd_config
+   sudo service sshd restart
+   cd /root
+   sudo yum update
+   sudo yum install epel-release -y
+   sudo yum update
+   echo "installing python"
+   sudo yum install python2.7 -y
+   sudo yum update
+   sudo yum install python-pip -y
+   sudo yum install --upgrade pip
+   sudo yum install fabric -y
+   #sudo pip install fabric
+   fab -f /vagrant/vpro_app/fabfile.py rabbitmq_c
    SHELL
 end
 end
